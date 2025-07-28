@@ -19,7 +19,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = StockListViewController()
+        
+        let viewModel = StockListViewModel(stockService: StockService())
+        let rootVC = StockListViewController(viewModel: viewModel)
+        let nav = UINavigationController(rootViewController: rootVC)
+        
+        window?.rootViewController = nav
         window?.makeKeyAndVisible()
     }
 
