@@ -17,6 +17,8 @@ class StockListViewModel {
     
     var onStateChanged: ((LoadableState<[StockViewModel]>) -> Void)?
     
+    private var allStocks: [StockViewModel] = []
+    
     var stocks: [StockViewModel] {
         self.state.value ?? []
     }
@@ -36,11 +38,29 @@ class StockListViewModel {
                 switch result {
                 case .success(let stocks):
                     let stockViewModels = stocks.map { StockViewModel(stock: $0) }
+                    self.allStocks = stockViewModels
                     self.state = stockViewModels.isEmpty ? .empty : .loaded(stockViewModels)
                 case .failure(let error):
                     self.state = .error(error)
                 }
             }
         }
+    }
+    
+    func search(_ query: String) {
+        self.applySearchFilter(query: query)
+    }
+
+    private func applySearchFilter(query: String) {
+        let lowercasedQuery = query.lowercased()
+        
+        let filtered = lowercasedQuery.isEmpty
+        ? allStocks
+        : allStocks.filter {
+            $0.stock.ticker.lowercased().contains(lowercasedQuery) ||
+            $0.stock.name.lowercased().contains(lowercasedQuery)
+        }
+        
+        self.state = filtered.isEmpty ? .empty : .loaded(filtered)
     }
 }
