@@ -25,7 +25,7 @@ class StockViewModel {
     
     var displayPrice: String {
         let price = Double(stock.currentPriceCents) / 100
-        return String(format: "%.2f", price)
+        return FormatterHelper.formatPrice(price)
     }
     
     var displayQuantity: String {
@@ -36,11 +36,6 @@ class StockViewModel {
     }
     
     var formattedDate: String {
-        let date = Date(timeIntervalSince1970: TimeInterval(stock.currentPriceTimestamp))
-        
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
+        return FormatterHelper.formatDate(from: TimeInterval(stock.currentPriceTimestamp))
     }
 }
