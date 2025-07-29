@@ -20,9 +20,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(windowScene: windowScene)
         
-        let viewModel = StockListViewModel(stockService: StockService())
+        let stockService = StockServiceFactory.make()
+        let viewModel = StockListViewModel(stockService: stockService)
         let rootVC = StockListViewController(viewModel: viewModel)
         let nav = UINavigationController(rootViewController: rootVC)
+        nav.navigationBar.prefersLargeTitles = true
         
         window?.rootViewController = nav
         window?.makeKeyAndVisible()
