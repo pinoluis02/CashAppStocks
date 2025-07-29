@@ -6,10 +6,12 @@
 //
 
 import UIKit
+import SwiftUI
 
 class StockListViewController: UIViewController {
     
     private let viewModel: StockListViewModel
+    private var stateOverlayHost: UIView?
     
     private let searchController = UISearchController(searchResultsController: nil)
     private let refreshControl = UIRefreshControl()
@@ -77,17 +79,43 @@ class StockListViewController: UIViewController {
                 switch state {
                 case .loading:
                     print("loading State")
+                    self.navigationItem.searchController = self.searchController
+                    self.showOverlay(LoadingView())
                 case .loaded:
                     print("loaded State - count:\(self.viewModel.stocks.count)")
+                    self.navigationItem.searchController = self.searchController
+                    self.stateOverlayHost?.removeFromSuperview()
                     self.tableView.reloadData()
                 case .empty:
                     print("empty State")
-//                    self.tableView.reloadData()
+                    self.tableView.reloadData()
+                    self.navigationItem.searchController = nil
+                    self.showOverlay(EmptyStateView())
                 case .error(let error):
                     print("error State")
+                    self.navigationItem.searchController = nil
+                    self.showOverlay(ErrorView(message: error.localizedDescription))
                 }
             }
         }
+    }
+    
+    private func showOverlay<V: View>(_ swiftUIView: V) {
+        self.stateOverlayHost?.removeFromSuperview()
+        
+        let host = UIHostingController(rootView: swiftUIView)
+        host.view.translatesAutoresizingMaskIntoConstraints = false
+        host.view.backgroundColor = .clear
+        
+        self.view.addSubview(host.view)
+        NSLayoutConstraint.activate([
+            host.view.topAnchor.constraint(equalTo: self.view.topAnchor),
+            host.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            host.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            host.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+        ])
+        
+        self.stateOverlayHost = host.view
     }
     
     @objc private func didPullToRefresh() {
