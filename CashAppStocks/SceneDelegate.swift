@@ -19,15 +19,41 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(windowScene: windowScene)
+        window?.rootViewController = self.createTabBar()
+        window?.makeKeyAndVisible()
+    }
+    
+    func createTabBar() -> UITabBarController {
+        let tabBar = UITabBarController()
+        tabBar.viewControllers = [self.createStockListNav(), self.createSettingsNav()]
+        tabBar.tabBar.tintColor = .systemGreen
+        tabBar.tabBar.backgroundColor = .systemBackground
         
+        return tabBar
+    }
+    
+    // Stocks tab
+    func createStockListNav() -> UINavigationController {
         let stockService = StockServiceFactory.make()
         let viewModel = StockListViewModel(stockService: stockService)
-        let rootVC = StockListViewController(viewModel: viewModel)
-        let nav = UINavigationController(rootViewController: rootVC)
-        nav.navigationBar.prefersLargeTitles = true
+        let stocksVC = StockListViewController(viewModel: viewModel)
+        stocksVC.title = "Stocks"
+        let stocksNav = UINavigationController(rootViewController: stocksVC)
+        stocksNav.navigationBar.prefersLargeTitles = true
+        stocksNav.tabBarItem = UITabBarItem(title: "Stocks", image: UIImage(systemName: "list.bullet"), tag: 0)
         
-        window?.rootViewController = nav
-        window?.makeKeyAndVisible()
+        return stocksNav
+    }
+    
+    // Settings tab
+    func createSettingsNav() -> UINavigationController {
+        let settingsVC = SettingsViewController()
+        settingsVC.title = "Settings"
+        let settingsNav = UINavigationController(rootViewController: settingsVC)
+        settingsNav.navigationBar.prefersLargeTitles = true
+        settingsNav.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(systemName: "gearshape"), tag: 1)
+        
+        return settingsNav
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

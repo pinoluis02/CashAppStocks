@@ -18,9 +18,15 @@ class StockListViewModel {
     var onStateChanged: ((LoadableState<[StockViewModel]>) -> Void)?
     
     private var allStocks: [StockViewModel] = []
+    private var searchQuery: String = ""
     
     var stocks: [StockViewModel] {
-        self.state.value ?? []
+        //        self.state.value ?? []
+        guard !searchQuery.isEmpty else { return allStocks }
+        return allStocks.filter {
+            $0.stock.ticker.lowercased().contains(searchQuery.lowercased()) ||
+            $0.stock.name.lowercased().contains(searchQuery.lowercased())
+        }
     }
     
     
@@ -34,7 +40,6 @@ class StockListViewModel {
         self.stockService.fetchPortofolio { [weak self] result in
             DispatchQueue.main.async {
                 guard let self = self else { return }
-                
                 switch result {
                 case .success(let stocks):
                     let stockViewModels = stocks.map { StockViewModel(stock: $0) }
@@ -47,20 +52,8 @@ class StockListViewModel {
         }
     }
     
-    func search(_ query: String) {
-        self.applySearchFilter(query: query)
-    }
-
-    private func applySearchFilter(query: String) {
-        let lowercasedQuery = query.lowercased()
-        
-        let filtered = lowercasedQuery.isEmpty
-        ? allStocks
-        : allStocks.filter {
-            $0.stock.ticker.lowercased().contains(lowercasedQuery) ||
-            $0.stock.name.lowercased().contains(lowercasedQuery)
-        }
-        
-        self.state = filtered.isEmpty ? .empty : .loaded(filtered)
+    func updateSearchQuery(_ query: String) {
+        self.searchQuery = query
+        self.onStateChanged?(self.state)
     }
 }

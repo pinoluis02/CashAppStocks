@@ -38,7 +38,6 @@ class StockListViewController: UIViewController {
     }
     
     func setupUI() {
-        self.title = "Stocks"
         self.view.backgroundColor = .systemBackground
         self.view.addSubview(self.tableView)
         self.setupTableView()
@@ -74,20 +73,18 @@ class StockListViewController: UIViewController {
             guard let self = self else { return }
             DispatchQueue.main.async {
                 self.refreshControl.endRefreshing()
+                
                 switch state {
                 case .loading:
                     print("loading State")
-                    break
                 case .loaded:
-                    print("loaded State")
+                    print("loaded State - count:\(self.viewModel.stocks.count)")
                     self.tableView.reloadData()
                 case .empty:
                     print("empty State")
-                    self.tableView.reloadData()
-                    break
+//                    self.tableView.reloadData()
                 case .error(let error):
                     print("error State")
-                    break
                 }
             }
         }
@@ -105,6 +102,12 @@ extension StockListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        guard indexPath.row < viewModel.stocks.count else {
+            print("⚠️ indexPath.row (\(indexPath.row)) out of bounds for stocks count: \(self.viewModel.stocks.count)")
+            return UITableViewCell()
+        }
+        
         let item = self.viewModel.stocks[indexPath.row]
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: StockListCell.identifier, for: indexPath) as? StockListCell else {
@@ -121,6 +124,6 @@ extension StockListViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
         let query = searchController.searchBar.text ?? ""
-        self.viewModel.search(query)
+        self.viewModel.updateSearchQuery(query)
     }
 }
