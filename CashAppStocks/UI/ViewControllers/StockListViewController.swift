@@ -24,6 +24,7 @@ class StockListViewController: UIViewController {
     }()
 
     
+    // MARK: - Init
     init(viewModel: StockListViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -42,6 +43,7 @@ class StockListViewController: UIViewController {
         }
     }
     
+    // MARK: - Setup
     private func setupUI() {
         self.view.backgroundColor = .systemBackground
         self.view.addSubview(self.tableView)
@@ -85,6 +87,7 @@ class StockListViewController: UIViewController {
             .store(in: &cancellables)
     }
     
+    // MARK: - Actions
     private func handle(state: LoadableState<[StockViewModel]>) {
         switch state {
         case .loading:

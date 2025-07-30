@@ -9,6 +9,7 @@ import UIKit
 
 class StockListCell: UITableViewCell, ReusableCell {
     
+    // MARK: - UI Components
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.systemGray6
@@ -39,6 +40,8 @@ class StockListCell: UITableViewCell, ReusableCell {
         return label
     }()
     
+    
+    // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.setupUI()
@@ -48,6 +51,7 @@ class StockListCell: UITableViewCell, ReusableCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Setup
     private func setupUI() {
         selectionStyle = .none
         backgroundColor = .clear
@@ -86,6 +90,7 @@ class StockListCell: UITableViewCell, ReusableCell {
         ])
     }
     
+    // MARK: - Configure
     func configure(with viewModel: StockViewModel) {
         self.symbolLabel.text = viewModel.displaySymbol
         self.nameLabel.text = viewModel.displayName

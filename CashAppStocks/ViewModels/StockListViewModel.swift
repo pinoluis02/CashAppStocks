@@ -20,7 +20,7 @@ class StockListViewModel {
         self.state.value ?? []
     }
 
-
+    
     init(stockService: StockServiceProtocol = StockService()) {
         self.stockService = stockService
         self.setupBindings()
