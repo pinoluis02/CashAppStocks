@@ -143,7 +143,7 @@ class StockListViewController: UIViewController {
 }
 
 
-//MARK: UITableViewDelegate & UITableViewDataSource
+// MARK: - UITableViewDelegate & UITableViewDataSource
 extension StockListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -170,7 +170,7 @@ extension StockListViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 
-// MARK: UISearchResultsUpdating
+// MARK: - UISearchResultsUpdating
 extension StockListViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {

@@ -19,8 +19,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(windowScene: windowScene)
+        self.applyPreferredTheme()
+        
         window?.rootViewController = self.createTabBar()
         window?.makeKeyAndVisible()
+    }
+    
+    func applyPreferredTheme() {
+        // Apply preferred theme from UserDefaults
+        let raw = UserDefaults.standard.string(forKey: Constants.AppStorageKeys.preferredTheme) ?? ThemeOption.system.rawValue
+        let preferred = ThemeOption(rawValue: raw) ?? .system
+        window?.overrideUserInterfaceStyle = preferred.interfaceStyle
     }
     
     func createTabBar() -> UITabBarController {

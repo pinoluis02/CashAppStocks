@@ -32,7 +32,6 @@ class StockListViewModel {
         self.state = .loading
         
         do {
-            try await Task.sleep(nanoseconds: 3_000_000_000) // 1 second delay
             let stocks = try await self.stockService.fetchPortofolio()
             self.allStocks = stocks.map { StockViewModel(stock: $0) }
             let filtered = self.filterStocks(self.allStocks)
