@@ -7,7 +7,7 @@
 
 import Foundation
 
-class StockViewModel {
+struct StockViewModel {
    
     let stock: Stock
     
