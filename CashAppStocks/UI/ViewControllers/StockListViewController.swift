@@ -42,7 +42,7 @@ class StockListViewController: UIViewController {
         }
     }
     
-    func setupUI() {
+    private func setupUI() {
         self.view.backgroundColor = .systemBackground
         self.view.addSubview(self.tableView)
         self.setupTableView()
@@ -74,12 +74,12 @@ class StockListViewController: UIViewController {
         ])
     }
 
-    func bindViewModel() {
+    private func bindViewModel() {
         self.viewModel.$state
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
                 guard let self = self else { return }
-
+                
                 self.handle(state: state)
             }
             .store(in: &cancellables)
@@ -142,6 +142,8 @@ class StockListViewController: UIViewController {
     }
 }
 
+
+//MARK: UITableViewDelegate & UITableViewDataSource
 extension StockListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -167,6 +169,8 @@ extension StockListViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
+
+// MARK: UISearchResultsUpdating
 extension StockListViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {

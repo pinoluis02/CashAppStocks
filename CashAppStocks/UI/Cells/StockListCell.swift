@@ -51,7 +51,6 @@ class StockListCell: UITableViewCell, ReusableCell {
     private func setupUI() {
         selectionStyle = .none
         backgroundColor = .clear
-        
         self.setupContainerView()
         self.setupStackView()
     }
