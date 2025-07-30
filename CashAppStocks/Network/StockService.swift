@@ -29,8 +29,7 @@ enum StockEndpoint {
 
 
 protocol StockServiceProtocol {
-    
-    func fetchPortofolio(completion:@escaping (Result<[Stock], Error>) -> Void)
+    func fetchPortofolio() async throws -> [Stock]
 }
 
 
@@ -42,27 +41,27 @@ class StockService: StockServiceProtocol {
     init(endpoint: StockEndpoint = .portofolio) {
         self.endpoint = endpoint
     }
-    
-    func fetchPortofolio(completion: @escaping (Result<[Stock], Error>) -> Void) {
+
+    func fetchPortofolio() async throws -> [Stock] {
+        var request = URLRequest(url: self.endpoint.url)
+        request.cachePolicy = .reloadIgnoringLocalCacheData
+        request.timeoutInterval = 5.0
         
-        URLSession.shared.dataTask(with: self.endpoint.url) { data, _, error in
-            
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            
-            guard let data = data else {
-                completion(.failure(NSError(domain: "StockService", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received."])))
-                return
-            }
-            
-            do {
-                let portofolio = try JSONDecoder().decode(Portofolio.self, from: data)
-                completion(.success(portofolio.stocks))
-            } catch {
-                completion(.failure(error))
-            }
-        }.resume()
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw CANetworkError.invalidResponse(statusCode: -1)
+        }
+        
+        guard httpResponse.statusCode == 200 else {
+            throw CANetworkError.invalidResponse(statusCode: httpResponse.statusCode)
+        }
+        
+        do {
+            let portofolio = try JSONDecoder().decode(Portofolio.self, from: data)
+            return portofolio.stocks
+        } catch {
+            throw CANetworkError.decodingFailed(error)
+        }
     }
 }

@@ -27,4 +27,24 @@ extension LoadableState {
         if case .error(let e) = self { return e }
         return nil
     }
+    
+    var isLoading: Bool {
+        if case .loading = self { return true }
+        return false
+    }
+    
+    var isLoaded: Bool {
+        if case .loaded = self { return true }
+        return false
+    }
+    
+    var isEmpty: Bool {
+        if case .empty = self { return true }
+        return false
+    }
+    
+    var isError: Bool {
+        if case .error = self { return true }
+        return false
+    }
 }

@@ -7,14 +7,15 @@
 
 import UIKit
 import SwiftUI
+import Combine
 
 class StockListViewController: UIViewController {
     
     private let viewModel: StockListViewModel
     private var stateOverlayHost: UIView?
+    private var cancellables = Set<AnyCancellable>()
     
     private let searchController = UISearchController(searchResultsController: nil)
-    private let refreshControl = UIRefreshControl()
     
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -36,7 +37,9 @@ class StockListViewController: UIViewController {
         super.viewDidLoad()
         self.setupUI()
         self.bindViewModel()
-        self.viewModel.loadStocks()
+        Task {
+            await self.viewModel.loadStocks(caller: "viewDidLoad")
+        }
     }
     
     func setupUI() {
@@ -59,43 +62,53 @@ class StockListViewController: UIViewController {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .none
+        self.tableView.alwaysBounceVertical = true
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 80
+        
         NSLayoutConstraint.activate([
             self.tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 8),
             self.tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
             self.tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
             self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
         ])
-        
-        self.refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
-        self.tableView.refreshControl = self.refreshControl
+    }
+
+    func bindViewModel() {
+        self.viewModel.$state
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                guard let self = self else { return }
+
+                self.handle(state: state)
+            }
+            .store(in: &cancellables)
     }
     
-    func bindViewModel() {
-        self.viewModel.onStateChanged = { [weak self] state in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
-                self.refreshControl.endRefreshing()
-                
-                switch state {
-                case .loading:
-                    print("loading State")
-                    self.navigationItem.searchController = self.searchController
-                    self.showOverlay(LoadingView())
-                case .loaded:
-                    print("loaded State - count:\(self.viewModel.stocks.count)")
-                    self.navigationItem.searchController = self.searchController
-                    self.stateOverlayHost?.removeFromSuperview()
-                    self.tableView.reloadData()
-                case .empty:
-                    print("empty State")
-                    self.tableView.reloadData()
-                    self.navigationItem.searchController = nil
-                    self.showOverlay(EmptyStateView())
-                case .error(let error):
-                    print("error State")
-                    self.navigationItem.searchController = nil
-                    self.showOverlay(ErrorView(message: error.localizedDescription))
-                }
+    private func handle(state: LoadableState<[StockViewModel]>) {
+        switch state {
+        case .loading:
+            print("📡 UI: loading state")
+            self.setSearchBarEnabled(true)
+            self.showOverlay(LoadingView())
+        case .loaded(let stocks): // Access associated value
+            print("✅ UI: loaded state - count \(stocks.count)")
+            self.setSearchBarEnabled(true)
+            self.stateOverlayHost?.removeFromSuperview()
+            tableView.reloadData()
+        case .empty:
+            print("🈳 UI: empty state")
+            tableView.reloadData()
+            self.setSearchBarEnabled(true)
+            self.showOverlay(EmptyStateView())
+        case .error(let error):
+            print("❌ UI: error state: \(error.localizedDescription)")
+            self.setSearchBarEnabled(false)
+            if let caNetworkError = error as? CANetworkError {
+                print("❌ UI: error CANetworkError")
+                self.showOverlay(ErrorView(message: caNetworkError.errorDescription ?? error.localizedDescription))
+            } else {
+                self.showOverlay(ErrorView(message: error.localizedDescription))
             }
         }
     }
@@ -118,8 +131,14 @@ class StockListViewController: UIViewController {
         self.stateOverlayHost = host.view
     }
     
-    @objc private func didPullToRefresh() {
-        self.viewModel.loadStocks()
+    private func setSearchBarEnabled(_ isEnabled: Bool) {
+        self.searchController.searchBar.isUserInteractionEnabled = isEnabled
+        self.searchController.searchBar.alpha = isEnabled ? 1.0 : 0.5
+        
+        if !isEnabled {
+            self.searchController.searchBar.text = ""
+            self.searchController.isActive = false
+        }
     }
 }
 
@@ -151,7 +170,6 @@ extension StockListViewController: UITableViewDelegate, UITableViewDataSource {
 extension StockListViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
-        let query = searchController.searchBar.text ?? ""
-        self.viewModel.updateSearchQuery(query)
+        self.viewModel.searchQuery = searchController.searchBar.text ?? ""
     }
 }
