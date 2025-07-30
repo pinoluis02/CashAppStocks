@@ -151,9 +151,7 @@ extension StockListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        guard indexPath.row < viewModel.stocks.count else {
-            print("⚠️ indexPath.row (\(indexPath.row)) out of bounds for stocks count: \(self.viewModel.stocks.count)")
+        guard indexPath.row < self.viewModel.stocks.count else {
             return UITableViewCell()
         }
         
@@ -167,6 +165,13 @@ extension StockListViewController: UITableViewDelegate, UITableViewDataSource {
         
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let stockViewModel = viewModel.stocks[indexPath.row]
+        let detailVC = StockDetailViewController(stockViewModel: stockViewModel)
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
+
 }
 
 

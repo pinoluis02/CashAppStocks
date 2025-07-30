@@ -24,18 +24,26 @@ class StockViewModel {
     }
     
     var displayPrice: String {
-        let price = Double(stock.currentPriceCents) / 100
+        let price = Double(self.stock.currentPriceCents) / 100
         return FormatterHelper.formatPrice(price)
     }
     
     var displayQuantity: String {
-        guard let quantity = stock.quantity else {
-            return "Qty: N/A"
+        guard let quantity = self.stock.quantity else {
+            return "Qty: unavailable"
         }
         return "Qty: \(quantity)"
     }
     
+    var quantity: Int {
+        return self.stock.quantity ?? 0
+    }
+    
+    var currency: String {
+        return self.stock.currency
+    }
+    
     var formattedDate: String {
-        return FormatterHelper.formatDate(from: TimeInterval(stock.currentPriceTimestamp))
+        return FormatterHelper.formatDate(from: TimeInterval(self.stock.currentPriceTimestamp))
     }
 }
