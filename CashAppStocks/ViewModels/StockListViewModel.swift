@@ -28,7 +28,6 @@ class StockListViewModel {
 
     @MainActor
     func loadStocks(caller: String = #function) async {
-        print("➡️ loadStocks() called by: \(caller)")
         self.state = .loading
         
         do {
@@ -42,7 +41,6 @@ class StockListViewModel {
     }
 
     private func setupBindings() {
-        print("➡️ setupBindings() called")
         $searchQuery
             .removeDuplicates()
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)

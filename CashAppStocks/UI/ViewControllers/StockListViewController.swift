@@ -91,24 +91,19 @@ class StockListViewController: UIViewController {
     private func handle(state: LoadableState<[StockViewModel]>) {
         switch state {
         case .loading:
-            print("📡 UI: loading state")
             self.setSearchBarEnabled(true)
             self.showOverlay(LoadingView())
-        case .loaded(let stocks): // Access associated value
-            print("✅ UI: loaded state - count \(stocks.count)")
+        case .loaded(let stocks):
             self.setSearchBarEnabled(true)
             self.stateOverlayHost?.removeFromSuperview()
             tableView.reloadData()
         case .empty:
-            print("🈳 UI: empty state")
             tableView.reloadData()
             self.setSearchBarEnabled(true)
             self.showOverlay(EmptyStateView())
         case .error(let error):
-            print("❌ UI: error state: \(error.localizedDescription)")
             self.setSearchBarEnabled(false)
             if let caNetworkError = error as? CANetworkError {
-                print("❌ UI: error CANetworkError")
                 self.showOverlay(ErrorView(message: caNetworkError.errorDescription ?? error.localizedDescription))
             } else {
                 self.showOverlay(ErrorView(message: error.localizedDescription))
