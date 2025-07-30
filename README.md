@@ -10,7 +10,8 @@ The core goal was to balance simplicity with clarity, showcasing a real-world, s
 
 - **MVVM (Model-View-ViewModel)**:
   - Separates concerns cleanly between UI (ViewController), business logic (ViewModel), and data (Model).
-  - Improves testability (ViewModels and Services are unit-tested).
+  - Improves testability (ViewModels and Services are unit-tested). 
+  - If the number of screens increases, the structure can easily scale by integrating a Coordinator pattern to manage navigation and decouple flow logic from view controllers.
   
 - **Modular Design**:
   - Features like Networking, ViewModels, Views, and Helpers are organized in dedicated folders.
@@ -21,7 +22,6 @@ The core goal was to balance simplicity with clarity, showcasing a real-world, s
 
 - **Combine**:
   - Used for reactive binding (e.g., `@Published searchQuery`) with `debounce` to reduce unnecessary filtering.
-  - Keeps the UI updated in sync with the model layer changes.
   - Ensures the UI stays in sync with model layer changes through `@Published state`, which represents loading, loaded, empty, or error states.
 
 - **SwiftUI Interoperability**:
@@ -34,9 +34,9 @@ The core goal was to balance simplicity with clarity, showcasing a real-world, s
 |---------|-----------|
 | **UIKit-first over SwiftUI-only** | UIKit offers more control and aligns with many existing production codebases. SwiftUI is used selectively where it shines. |
 | **No third-party libraries** | Prioritized native APIs for simplicity, transparency, and portability. |
-| **StockListViewModel `loadStocks()` marked as @MainActor | Ensures UI state updates (like setting .loading or .error) happen safely on the main thread. This allows other parts of the ViewModel to remain thread-neutral, offering more flexibility in the future. |
+| **StockListViewModel `loadStocks()` marked as `@MainActor` ** | Ensures UI state updates (like setting .loading or .error) happen safely on the main thread. This allows other parts of the ViewModel to remain thread-neutral, offering more flexibility in the future. |
 | **Basic local caching** | Not implemented; assumed live call for simplicity. But caching could be added via URLCache or CoreData layer. |
-| **Dynamic Environment Switching in Settings** | Adds value and test flexibility, but could be seen as beyond scope—happy to remove or feature-flag. |
+| **Appearance (Theme Selection) in Settings** | Adds value and test flexibility between light, dark, or system theme, but could be seen as beyond scope—happy to remove or feature-flag. |
 
 ## 🛠 How to Run the Project
 
@@ -64,8 +64,9 @@ The project includes unit tests for:
 - Error, Empty, and Loading state handling
 - Search with debounce and filtering
 - Dynamic theme switching (Light / Dark / System)
-- Custom `StockCardView` for consistent presentation
+- Custom CardStyle for consistent presentation
 - Mockable, testable architecture
+
 
 ## 🙌 Final Thoughts
 
@@ -74,5 +75,7 @@ This app is intentionally clean and concise to reflect good production practices
 - Testability
 - Clear UI feedback
 - Swift / UIKit proficiency
+
+
 
 Thank you for reviewing! Happy to discuss further or walk through any part of the implementation.
