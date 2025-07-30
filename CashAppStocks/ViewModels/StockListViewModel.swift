@@ -27,7 +27,7 @@ class StockListViewModel {
     }
 
     @MainActor
-    func loadStocks(caller: String = #function) async {
+    func loadStocks() async {
         self.state = .loading
         
         do {

@@ -39,7 +39,7 @@ class StockListViewController: UIViewController {
         self.setupUI()
         self.bindViewModel()
         Task {
-            await self.viewModel.loadStocks(caller: "viewDidLoad")
+            await self.viewModel.loadStocks()
         }
     }
     
@@ -93,7 +93,7 @@ class StockListViewController: UIViewController {
         case .loading:
             self.setSearchBarEnabled(true)
             self.showOverlay(LoadingView())
-        case .loaded(let stocks):
+        case .loaded(_):
             self.setSearchBarEnabled(true)
             self.stateOverlayHost?.removeFromSuperview()
             tableView.reloadData()
