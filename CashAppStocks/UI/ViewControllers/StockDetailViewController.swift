@@ -14,7 +14,7 @@ class StockDetailViewController: UIViewController {
     // MARK: - UI Components
     private lazy var tickerLabel: UILabel = {
         let label = UILabel()
-        label.text = stockViewModel.displaySymbol
+        label.text = self.stockViewModel.displaySymbol
         label.font = .preferredFont(forTextStyle: .largeTitle)
         label.textColor = .label
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -32,7 +32,7 @@ class StockDetailViewController: UIViewController {
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.text = stockViewModel.displayName
+        label.text = self.stockViewModel.displayName
         label.font = .preferredFont(forTextStyle: .title2)
         label.textColor = .secondaryLabel
         label.textAlignment = .center
@@ -43,7 +43,7 @@ class StockDetailViewController: UIViewController {
     
     private lazy var priceLabel: UILabel = {
         let label = UILabel()
-        label.text = "\(stockViewModel.displayPrice) \(stockViewModel.currency)"
+        label.text = "\(self.stockViewModel.displayPrice) \(self.stockViewModel.currency)"
         label.font = .preferredFont(forTextStyle: .title1)
         label.textColor = .systemGreen
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -52,7 +52,7 @@ class StockDetailViewController: UIViewController {
     
     private lazy var quantityLabel: UILabel = {
         let label = UILabel()
-        label.text = stockViewModel.displayQuantity
+        label.text = self.stockViewModel.displayQuantity
         label.font = .preferredFont(forTextStyle: .body)
         label.textColor = .secondaryLabel
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -61,7 +61,7 @@ class StockDetailViewController: UIViewController {
     
     private lazy var timestampLabel: UILabel = {
         let label = UILabel()
-        label.text = stockViewModel.formattedDate
+        label.text = self.stockViewModel.formattedDate
         label.font = .preferredFont(forTextStyle: .subheadline)
         label.textColor = .systemGray
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -70,12 +70,12 @@ class StockDetailViewController: UIViewController {
     
     private lazy var stack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [
-            tickerLabel,
-            imageView,
-            nameLabel,
-            priceLabel,
-            quantityLabel,
-            timestampLabel
+            self.tickerLabel,
+            self.imageView,
+            self.nameLabel,
+            self.priceLabel,
+            self.quantityLabel,
+            self.timestampLabel
         ])
         stack.axis = .vertical
         stack.spacing = 12
@@ -105,17 +105,19 @@ class StockDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = self.stockViewModel.displaySymbol
         view.backgroundColor = .systemBackground
         self.setupUI()
     }
     
     // MARK: - Setup
     private func setupUI() {
-        self.applyCardShadow(to: self.cardView)
-        view.addSubview(cardView)
+        view.addSubview(self.cardView)
         self.cardView.addSubview(stack)
-        
+        self.cardView.applyCardStyle()
+        self.setupConstraints()
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             self.cardView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             self.cardView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
@@ -130,15 +132,5 @@ class StockDetailViewController: UIViewController {
             self.stack.leadingAnchor.constraint(equalTo: self.cardView.leadingAnchor, constant: 16),
             self.stack.trailingAnchor.constraint(equalTo: self.cardView.trailingAnchor, constant: -16),
         ])
-    }
-    
-    private func applyCardShadow(to: UIView) {
-        
-        cardView.layer.cornerRadius = 12
-        cardView.layer.shadowColor = UIColor.systemGray.cgColor
-        cardView.layer.shadowOpacity = 0.3
-        cardView.layer.shadowOffset = CGSize(width: 0, height: 4)
-        cardView.layer.shadowRadius = 8
-        cardView.layer.masksToBounds = false
     }
 }

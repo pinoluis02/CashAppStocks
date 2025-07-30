@@ -20,6 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(windowScene: windowScene)
         self.applyPreferredTheme()
+        self.configureAppearance()
         
         window?.rootViewController = self.createTabBar()
         window?.makeKeyAndVisible()
@@ -30,6 +31,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let raw = UserDefaults.standard.string(forKey: Constants.AppStorageKeys.preferredTheme) ?? ThemeOption.system.rawValue
         let preferred = ThemeOption(rawValue: raw) ?? .system
         window?.overrideUserInterfaceStyle = preferred.interfaceStyle
+    }
+    
+    func configureAppearance() {
+        UINavigationBar.appearance().tintColor = .label
+        
+        let appearance = UITabBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.shadowColor = UIColor.separator
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+        UITabBar.appearance().tintColor = .systemGreen
+        UITabBar.appearance().unselectedItemTintColor = .gray
     }
     
     func createTabBar() -> UITabBarController {

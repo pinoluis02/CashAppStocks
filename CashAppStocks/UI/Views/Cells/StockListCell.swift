@@ -12,8 +12,7 @@ class StockListCell: UITableViewCell, ReusableCell {
     // MARK: - UI Components
     private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.systemGray6
-        view.layer.cornerRadius = 12
+        view.applyCardStyle()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
