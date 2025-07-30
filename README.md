@@ -3,6 +3,8 @@
 
 A lightweight iOS app that displays a portfolio of stocks using clean architecture principles, modern UIKit + SwiftUI patterns, and Combine.
 
+</br>
+
 ## 🧠 Thought Process & Architectural Approach
 
 The core goal was to balance simplicity with clarity, showcasing a real-world, scalable UIKit app enhanced with SwiftUI where appropriate.
@@ -40,9 +42,9 @@ The core goal was to balance simplicity with clarity, showcasing a real-world, s
 |-------------------------------------|-------------------------------------|-------------------------------------|-------------------------------------|
 | Stock List - Light                  | Detail Screen - Light               | Settings - Light                    | Erorr - Light                       |
 
-| <img width="206" alt="List_Dark" src="https://github.com/user-attachments/assets/6fe59a58-d4e7-49d8-9523-332fee2cb55e" /> |<img width="206" alt="Details_Dark" src="https://github.com/user-attachments/assets/64258467-afa2-4a09-add3-8986fa2cc7a6" /> | <img width="206" alt="Settings_Dark" src="https://github.com/user-attachments/assets/7bc6820f-3445-47e9-a9af-2ff4a8f8541e" /> | <img width="206" alt="HomeScreen_Dark" src="https://github.com/user-attachments/assets/917193e3-50fd-4740-838d-dc71dcc7d0ae"/> |
+| <img width="206" alt="List_Dark" src="https://github.com/user-attachments/assets/6fe59a58-d4e7-49d8-9523-332fee2cb55e" /> |<img width="206" alt="Details_Dark" src="https://github.com/user-attachments/assets/64258467-afa2-4a09-add3-8986fa2cc7a6" /> | <img width="206" alt="Settings_Dark" src="https://github.com/user-attachments/assets/e90f343e-c3f2-4513-b80b-f0499f7cd9b3" /> | <img width="206" alt="HomeScreen_Dark" src="https://github.com/user-attachments/assets/917193e3-50fd-4740-838d-dc71dcc7d0ae"/> |
 |-------------------------------------|-------------------------------------|-------------------------------------|-------------------------------------|
-| Stock List - Dark                   | Detail Screen - Dark                | Settings - Dark                     | Empty - Light                       |
+| Stock List - Dark                   | Detail Screen - Dark                | Loading - Light                     | Empty - Light                       |
 
 
 ----
