@@ -1,4 +1,5 @@
-# CashAppStocks 📈
+# CashAppStocks  <img width="60" alt="appcion_light" src="https://github.com/user-attachments/assets/6b7fa719-99f2-475d-bf9a-0c4a4dc51589" />
+
 
 A lightweight iOS app that displays a portfolio of stocks using clean architecture principles, modern UIKit + SwiftUI patterns, and Combine.
 
@@ -6,7 +7,9 @@ A lightweight iOS app that displays a portfolio of stocks using clean architectu
 
 The core goal was to balance simplicity with clarity, showcasing a real-world, scalable UIKit app enhanced with SwiftUI where appropriate.
 
-### Architecture
+</br>
+
+## Architecture
 
 - **MVVM (Model-View-ViewModel)**:
   - Separates concerns cleanly between UI (ViewController), business logic (ViewModel), and data (Model).
@@ -27,6 +30,24 @@ The core goal was to balance simplicity with clarity, showcasing a real-world, s
 - **SwiftUI Interoperability**:
   - SwiftUI was leveraged in the `EmptyStateView`, `LoadingView`, `ErrorView` to demonstrate composability and modern UI practices within a UIKit-first app.
   - Demonstrates comfort with both technologies.
+ 
+
+----
+
+## 🎨 UI Showcase
+
+| <img width="206" alt="List_Light" src="https://github.com/user-attachments/assets/5d52ee5a-86bf-4930-969f-7d48ac41e9e4" /> |<img width="206" alt="Details_Light" src="https://github.com/user-attachments/assets/0295160b-33e8-4dab-a660-a1f83ef44016" /> | <img width="206" alt="Settings_Light" src="https://github.com/user-attachments/assets/630bb107-8371-4f5d-9042-38aa8d3b6e9f" /> | <img width="206" alt="HomeScreen_Dark" src="https://github.com/user-attachments/assets/abcf2761-8db6-4eab-879e-99330819eb9a"/> |
+|-------------------------------------|-------------------------------------|-------------------------------------|-------------------------------------|
+| Stock List - Light                  | Detail Screen - Light               | Settings - Light                    | Erorr - Light                       |
+
+| <img width="206" alt="List_Dark" src="https://github.com/user-attachments/assets/6fe59a58-d4e7-49d8-9523-332fee2cb55e" /> |<img width="206" alt="Details_Dark" src="https://github.com/user-attachments/assets/64258467-afa2-4a09-add3-8986fa2cc7a6" /> | <img width="206" alt="Settings_Dark" src="https://github.com/user-attachments/assets/7bc6820f-3445-47e9-a9af-2ff4a8f8541e" /> | <img width="206" alt="HomeScreen_Dark" src="https://github.com/user-attachments/assets/917193e3-50fd-4740-838d-dc71dcc7d0ae"/> |
+|-------------------------------------|-------------------------------------|-------------------------------------|-------------------------------------|
+| Stock List - Dark                   | Detail Screen - Dark                | Settings - Dark                     | Empty - Light                       |
+
+
+----
+
+</br>
 
 ### Tradeoffs & Decisions
 
@@ -34,9 +55,11 @@ The core goal was to balance simplicity with clarity, showcasing a real-world, s
 |---------|-----------|
 | **UIKit-first over SwiftUI-only** | UIKit offers more control and aligns with many existing production codebases. SwiftUI is used selectively where it shines. |
 | **No third-party libraries** | Prioritized native APIs for simplicity, transparency, and portability. |
-| **StockListViewModel `loadStocks()` marked as `@MainActor` ** | Ensures UI state updates (like setting .loading or .error) happen safely on the main thread. This allows other parts of the ViewModel to remain thread-neutral, offering more flexibility in the future. |
+| **StockListViewModel `loadStocks()` marked as `@MainActor`** | Ensures UI state updates (like setting .loading or .error) happen safely on the main thread. This allows other parts of the ViewModel to remain thread-neutral, offering more flexibility in the future. |
 | **Basic local caching** | Not implemented; assumed live call for simplicity. But caching could be added via URLCache or CoreData layer. |
 | **Appearance (Theme Selection) in Settings** | Adds value and test flexibility between light, dark, or system theme, but could be seen as beyond scope—happy to remove or feature-flag. |
+
+</br>
 
 ## 🛠 How to Run the Project
 
